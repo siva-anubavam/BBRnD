@@ -2,15 +2,15 @@ MIDlet-Name: BBSample
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: BlackBerry Developer
 MIDlet-Jar-URL: BBSample.jar
-MIDlet-Jar-Size: 7867
+MIDlet-Jar-Size: 18235
 MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
 MIDlet-1: ,res/img/icon.png,
 RIM-MIDlet-Flags-1: 0
 Manifest-Version: 1.0
 RIM-COD-URL: BBSample.cod
-RIM-COD-Size: 3620
-RIM-COD-Creation-Time: 1382440713
+RIM-COD-Size: 7168
+RIM-COD-Creation-Time: 1382525749
 RIM-COD-Module-Name: BBSample
 RIM-COD-Module-Dependencies: net_rim_cldc
-RIM-COD-SHA1: d1 4d bc 68 6c e6 a5 2a ec 0d d9 65 ef e2 f3 99 8a a2 2c 9d
+RIM-COD-SHA1: 5c fc 9e d1 7f 38 fa ee 58 14 5a 6a 9e 95 62 7e 71 dd af 79
