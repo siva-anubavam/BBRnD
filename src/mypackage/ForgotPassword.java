@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -18,8 +21,6 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 public class ForgotPassword extends MainScreen {
 	private EmailAddressEditField enterEmail;
-	private HttpConnection httpConn;
-	private InputStream is;
 
 	/**
 	 * 
@@ -41,54 +42,74 @@ public class ForgotPassword extends MainScreen {
          loginButton.setChangeListener( new FieldChangeListener() {
             public void fieldChanged( Field arg0, int arg1 ) {
             	try {
-					postViaHttpConnection("https://beta.shukranrewards.com/mobile/ForgotPassword",enterEmail.getText().toString());
+            		httpConnectionPostMethod("https://www.beta.shukranrewards.com/mobile/ForgotPassword;interface=wifi",enterEmail.getText().toString());
 				} catch (IOException e) {
 					Dialog.alert("error Json: "+e.getMessage().toString());
 					// TODO Auto-generated catch block
 				}
-            	//Dialog.inform("Email sent successfully");
             }
          });
 	}
+	
+	public void httpConnectionPostMethod(String url, String email) throws IOException {
 
-	void postViaHttpConnection(String url, String email) throws IOException {
-		StringBuffer postData = new StringBuffer();
+	    HttpConnection httpConn = null;
+	    InputStream is = null;
+	    OutputStream os = null;
 
-        httpConn = (HttpConnection) Connector.open(url);
-        httpConn.setRequestMethod(HttpConnection.POST);
+	    try {
+	        
+	      // Open an HTTP Connection object
+	      httpConn = (HttpConnection)Connector.open(url);
+	      // Setup HTTP Request to POST
+	      httpConn.setRequestMethod(HttpConnection.POST);
 
-        postData.append("?emailorcard="+email);
-        postData.append("lang=en");
-        postData.append(";deviceside=true");
-        
-        String encodedData = postData.toString();
+	      httpConn.setRequestProperty("User-Agent", "BlackBerry");
+	      httpConn.setRequestProperty("Accept_Language","en-US");
+	      //Content-Type is must to pass parameters in POST Request
+	      httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-        httpConn.setRequestProperty("Content-Language", "en-US");
-        httpConn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-        httpConn.setRequestProperty("Content-Length",(new Integer(encodedData.length())).toString());
-        byte[] postDataByte = postData.toString().getBytes("UTF-8");
+	      // This function retrieves the information of this connection
+	      // getConnectionInformation(httpConn);
 
-        OutputStream out = httpConn.openOutputStream(); 
-        out.write(postDataByte);
-        out.close();
+	      os = httpConn.openOutputStream();
+	     
 
-        httpConn.getResponseCode();
+	      String params;
+	      params = "lang=en&emailorcard=" + email;
 
-        is = httpConn.openInputStream(); 
+	      os.write(params.getBytes());
 
-        StringBuffer buffer = new StringBuffer();
-        int ch = 0;
-        
-        while (ch != -1) {
-            ch = is.read();
-            buffer.append((char) ch);
-        }
+	      /**Caution: os.flush() is controversial. It may create unexpected behavior
+	            on certain mobile devices. Try it out for your mobile device **/
 
-        String json = buffer.toString();
+	      //os.flush();
 
-        Dialog.alert("Received Json: "+json);
+	      // Read Response from the Server
 
+	      StringBuffer sb = new StringBuffer();
+	      is = httpConn.openDataInputStream();
+	      int chr;
+	      while ((chr = is.read()) != -1)
+	        sb.append((char) chr);
 
-    }
-
+	      // Web Server just returns the birthday in mm/dd/yy format.
+	      //Dialog.alert(email+"'s Birthday is " + sb.toString());
+	      JSONObject jsonObject;
+		  try {
+			  jsonObject = new JSONObject(sb.toString());
+			  Dialog.alert("Message " + jsonObject.getString("message"));
+		  } catch (JSONException e) {
+		      // TODO Auto-generated catch block
+			  e.printStackTrace();
+		  }
+	   } finally {
+	        if(is!= null)
+	           is.close();
+	          if(os != null)
+	            os.close();
+	      if(httpConn != null)
+	            httpConn.close();
+	    }
+	}
 }

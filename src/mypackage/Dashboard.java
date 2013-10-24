@@ -30,11 +30,19 @@ public class Dashboard extends MainScreen {
             }
         } );
         
-        ButtonField changePassword = new ButtonField( "Change Password", ButtonField.CONSUME_CLICK | ButtonField.FIELD_HCENTER );
+        ButtonField changePassword = new ButtonField( "Change password", ButtonField.CONSUME_CLICK | ButtonField.FIELD_HCENTER );
         vfm.add( changePassword );
         changePassword.setChangeListener( new FieldChangeListener() {
             public void fieldChanged( Field arg0, int arg1 ) {
             	UiApplication.getUiApplication().pushScreen( new ChangePassword() );
+            }
+        } );
+        
+        ButtonField pointsCalculator = new ButtonField( "Points calculator", ButtonField.CONSUME_CLICK | ButtonField.FIELD_HCENTER );
+        vfm.add( pointsCalculator );
+        pointsCalculator.setChangeListener( new FieldChangeListener() {
+            public void fieldChanged( Field arg0, int arg1 ) {
+            	UiApplication.getUiApplication().pushScreen( new PointsCalculator() );
             }
         } );
 	}

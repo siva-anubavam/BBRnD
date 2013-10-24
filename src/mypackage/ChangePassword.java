@@ -19,7 +19,7 @@ public class ChangePassword extends MainScreen {
 	public ChangePassword() {
 		super(MainScreen.VERTICAL_SCROLL | MainScreen.VERTICAL_SCROLLBAR);
 		// TODO Auto-generated constructor stub
-		setTitle("Change Password");
+		setTitle("Change password");
 		
 		VerticalFieldManager vfm = new VerticalFieldManager(Manager.VERTICAL_SCROLL);
         vfm.setPadding(10, 10, 10, 10);
