@@ -15,5 +15,14 @@ public class AboutUs extends MainScreen {
 		
 		VerticalFieldManager vfm = new VerticalFieldManager(Manager.VERTICAL_SCROLL);
         vfm.setPadding(10, 10, 10, 10);
+        add(vfm);
+        
+        final CustomEditField ef = new CustomEditField("Destination");
+		
+        vfm.add(ef);
+		
+		final CustomEditField ef1 = new CustomEditField("Distance from your city");
+		
+		vfm.add(ef1);
 	}
 }
